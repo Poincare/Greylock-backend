@@ -24,10 +24,10 @@ class RouteSolver(object):
     def getNearestIntersections(self, location):
         ## TODO replace with the thing that actually gets the
         ## nearest intersection.
-        return [location]
+        return [(location,location)]
 
     def distanceBetweenPoints(self, a, b):
-        return vincenty(a,b).miles
+        return 3 * vincenty(a[0],b[0]).miles + vincenty(a[0],a[1]).miles + vincenty(b[0],b[1]).miles
 
     def solveIteration(self, nearestIntersections):
         pandasSolver = PantsSolver(nearestIntersections,
@@ -41,9 +41,9 @@ class RouteSolver(object):
         for _ in range(iterCount):
             selectedIntersections = []
 
-            for intersections in self.nearestIntersections:
+            for nodes in self.nearestIntersections:
                 ## pick a random interesection
-                selectedIntersections.append(random.choice(intersections))
+                selectedIntersections.append(random.choice(nodes))
 
             (solDist, solRoute) = self.solveIteration(selectedIntersections)
             if solDist < bestDist:
@@ -59,4 +59,4 @@ for _ in range(20):
   nodes.append((x, y))
 
 routesSolver = RouteSolver(nodes)
-print(routesSolver.solveRandomly)
+print(routesSolver.solveRandomly(10))
