@@ -12,7 +12,6 @@ def getRouteIntersections(gmapsClient, origin, destination, maxWalk):
     directions_result = gmapsClient.directions(origin, destination,
                                                mode='walking',
                                                departure_time=now)
-    maxWalk = 2500
     validIntersections = []
     totalDist = 0
     for leg in directions_result[0]['legs']:
