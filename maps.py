@@ -10,13 +10,13 @@ gmapsClient = gmaps.Client(key = gmapsKey)
 def getRouteIntersections(gmapsClient, origin, destination, maxWalk):
     now = datetime.now()
     directions_result = gmapsClient.directions(origin, destination,
-                                               mode='walking',
+                                               mode='driving',
                                                departure_time=now)
     validIntersections = []
     totalDist = 0
     for leg in directions_result[0]['legs']:
         for step in leg['steps']:
-            if totalDist < 2500:
+            if totalDist < maxWalk:
                 validIntersections.append(((step['end_location']['lat'],
                                             step['end_location']['lng']
                                            ), origin))
@@ -24,6 +24,19 @@ def getRouteIntersections(gmapsClient, origin, destination, maxWalk):
             else:
                 return validIntersections
 
+    return validIntersections
+
+# Returns list of intersections in a route to give to FrontEnd
+def getFinalResult(gmapsClient, origin, destination):
+    now = datetime.now()
+    directions_result = gmapsClient.directions(origin, destination,
+                                               mode='driving',
+                                               departure_time=now)
+    validIntersections = []
+    for leg in directions_result[0]['legs']:
+        for step in leg['steps']:
+            validIntersections.append((step['end_location']['lat'],
+                                        step['end_location']['lng']))
     return validIntersections
 
 def testGetRouteIntersection():

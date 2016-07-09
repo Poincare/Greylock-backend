@@ -31,7 +31,7 @@ class RouteSolver(object):
         nearestIntersections = []
         for other_loc in self.locations:
             if(other_loc != location):
-                nearestIntersections += maps.getRouteIntersections(gmapsClient, location, other_loc, 2500)
+                nearestIntersections += maps.getRouteIntersections(gmapsClient, location, other_loc, 1000)
         return nearestIntersections
 
     def distanceBetweenPoints(self, a, b):
@@ -62,16 +62,28 @@ class RouteSolver(object):
 
 
 
-nodes = []
-nodes.append((37.391905, -122.090510))
-nodes.append((37.392429, -122.083883))
-nodes.append((37.400337, -122.081737))
-nodes.append((37.392624, -122.079573))
-nodes.append((37.396269, -122.076458))
-nodes.append((37.406044, -122.077245))
-nodes.append((37.402992, -122.075254))
-nodes.append((37.412791, -122.095741))
-nodes.append((37.415972, -122.104818))
+homes = []
+homes.append((37.391905, -122.090510))
+homes.append((37.392429, -122.083883))
+homes.append((37.400337, -122.081737))
+homes.append((37.392624, -122.079573))
+homes.append((37.396269, -122.076458))
+homes.append((37.406044, -122.077245))
+homes.append((37.402992, -122.075254))
+homes.append((37.412791, -122.095741))
+homes.append((37.415972, -122.104818))
 
-routesSolver = RouteSolver(nodes)
-print(routesSolver.solveRandomly(10))
+routesSolver = RouteSolver(homes)
+solution = routesSolver.solveRandomly(10)
+print("SOLUTION:")
+print(solution)
+stops = solution[1]
+
+list_of_intersections = []
+for i in range(1,len(stops)):
+    list_of_intersections += maps.getFinalResult(gmapsClient, stops[i-1][0], stops[i][0])
+
+print("SEND TO FRONTEND:")
+print(list_of_intersections)
+
+
