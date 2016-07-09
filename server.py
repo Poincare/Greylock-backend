@@ -24,7 +24,8 @@ def computeRoutes():
     sortedRoutes = []
     for index in sortedIndices:
         sortedRoutes.append(routes[index])
-    return json.dumps(sortedRoutes)
+    sortedRenderedRoutes = map(routeSolver.renderRoute, sortedRoutes)
+    return json.dumps(sortedRenderedRoutes)
 
 if __name__ == '__main__':
     app.run(debug=True)
