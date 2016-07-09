@@ -84,6 +84,7 @@ for i in range(1,len(stops)):
     list_of_intersections += maps.getFinalResult(gmapsClient, stops[i-1][0], stops[i][0])
 
 print("SEND TO FRONTEND:")
-print(list_of_intersections)
+for interesection in list_of_intersections:
+    print ("[{0}, {1}],".format(interesection[1], interesection[0]))
 
 
