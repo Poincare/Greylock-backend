@@ -17,10 +17,9 @@ def getRouteIntersections(gmapsClient, origin, destination, maxWalk):
     for leg in directions_result[0]['legs']:
         for step in leg['steps']:
             if totalDist < 2500:
-                validIntersections.append((origin,
-                                           (step['end_location']['lat'],
+                validIntersections.append(((step['end_location']['lat'],
                                             step['end_location']['lng']
-                                           )))
+                                           ), origin))
                 totalDist += step['distance']['value']
             else:
                 return validIntersections
