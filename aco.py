@@ -1,6 +1,7 @@
 import pants
 import math
 import random
+from geopy.distance import vincenty
 
 class PantsSolver(object):
     def __init__(self, nodes, distMetric):
@@ -26,9 +27,7 @@ class RouteSolver(object):
         return [location]
 
     def distanceBetweenPoints(self, a, b):
-        ## TODO replace with the thing that figures out the distance
-        ## using the Google Maps API
-        return math.sqrt(pow(a[1] - b[1], 2) + pow(a[0] - b[0], 2))
+        return vincenty(a,b).miles
 
     def solveIteration(self, nearestIntersections):
         pandasSolver = PantsSolver(nearestIntersections,
@@ -53,9 +52,6 @@ class RouteSolver(object):
 
         return (bestDist, bestRoute)
 
-def euclidean(a, b):
-    return ((a[0] - b[0])**2) + ((a[1] - b[1])**2)
-
 nodes = []
 for _ in range(20):
   x = random.uniform(-10, 10)
@@ -63,3 +59,4 @@ for _ in range(20):
   nodes.append((x, y))
 
 routesSolver = RouteSolver(nodes)
+print(routesSolver.solveRandomly)
