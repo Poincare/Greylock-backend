@@ -15,7 +15,6 @@ destinations = ["Uluru, Australia",
                 "Blue Mountains, Australia",
                 "Bungle Bungles, Australia",
                 "The Pinnacles, Australia"]
-
 matrix = gmapsClient.distance_matrix(origins, destinations)
 
 print(matrix)
