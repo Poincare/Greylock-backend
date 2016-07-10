@@ -7,7 +7,7 @@ from pants.ant import Ant
 
 import maps
 
-gmapsKey = 'AIzaSyC19ecttqnSP6DxyANqAPH6_JSLee88T5A'
+gmapsKey = 'AIzaSyD0xObEyHQF_wQbDeljl_Q7DqQYhg74Cls'
 gmapsClient = gmaps.Client(key = gmapsKey)
 
 def geoDistance(a,b):

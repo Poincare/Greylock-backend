@@ -1,24 +1,27 @@
-## Maps key: AIzaSyC19ecttqnSP6DxyANqAPH6_JSLee88T5A
+## Maps key: AIzaSyD0xObEyHQF_wQbDeljl_Q7DqQYhg74Cls
 import googlemaps as gmaps
 from datetime import datetime
 import json
 import geopy
+import aco
 
-gmapsKey = 'AIzaSyC19ecttqnSP6DxyANqAPH6_JSLee88T5A'
+gmapsKey = 'AIzaSyD0xObEyHQF_wQbDeljl_Q7DqQYhg74Cls'
 gmapsClient = gmaps.Client(key = gmapsKey)
 
 def getNaiveDistance(origin, destination):
-    now = datetime.now()
-    directions_result = gmapsClient.directions(origin, destination,
-                                               mode='driving',
-                                               departure_time=now)
-    distInKm = (directions_result[0]['legs'][0]['distance']['value'])/1000.0
-    return (distInKm * 1.60934)
+#    now = datetime.now()
+#    directions_result = gmapsClient.directions(origin, destination,
+#                                               mode='driving',
+#                                               departure_time=now)
+#    distInKm = (directions_result[0]['legs'][0]['distance']['value'])/1000.0
+#    return (distInKm * 1.60934)
+    return (aco.geoDistance(origin, destination))
 
 def getTotalNaive(locations):
     res = 0.0
     for i in range(1, len(locations)):
         res += getNaiveDistance(locations[i-1], locations[i])
+
     return res
 
 # Returns the first point on the route between two points

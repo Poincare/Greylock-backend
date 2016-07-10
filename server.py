@@ -39,7 +39,7 @@ def computeRoutes():
     ret = {
         "paths": list(sortedRenderedRoutes),
         "points": locationTuples,
-        "best_distance": bestDistance,
+        "best_distance": int(bestDistance),
         "naive_distance": int(maps.getTotalNaive(locationTuples)),
     }
     return json.dumps(ret)
