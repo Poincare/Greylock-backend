@@ -4,7 +4,7 @@ from datetime import datetime
 import json
 import aco
 
-gmapsKey = 'AIzaSyB3l0T_okkiRLRCpPVj_RIJFnsoP1VYgKM'
+gmapsKey = 'AIzaSyD2HMu7mFghN26WjCRe8pjBwLFrxyn4kJ0'
 gmapsClient = gmaps.Client(key = gmapsKey)
 
 def getNaiveDistance(origin, destination):
