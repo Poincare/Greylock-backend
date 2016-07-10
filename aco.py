@@ -83,6 +83,10 @@ if __name__ == '__main__':
     homes.append((37.402992, -122.075254))
     homes.append((37.412791, -122.095741))
     homes.append((37.415972, -122.104818))
+    print("HOMES:")
+    for home in homes:
+        print ("[{0}, {1}],".format(home[1], home[0]))
+
 
     routesSolver = RouteSolver(homes)
     solution = routesSolver.solveRandomly(10)
@@ -95,4 +99,5 @@ if __name__ == '__main__':
         list_of_intersections += maps.getFinalResult(gmapsClient, stops[i-1][0], stops[i][0])
 
     print("SEND TO FRONTEND:")
-    print(list_of_intersections)
+    for interesection in list_of_intersections:
+        print ("[{0}, {1}],".format(interesection[1], interesection[0]))
