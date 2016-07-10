@@ -81,9 +81,8 @@ class RouteSolver(object):
                 selectedIntersections.append(random.choice(nodes))
 
             (solDist, solRoute) = self.solveIteration(selectedIntersections)
-            if solDist < bestDist:
-                distances.append(solDist)
-                routes.append(solRoute)
+            distances.append(solDist)
+            routes.append(solRoute)
 
         return (distances, routes)
 
