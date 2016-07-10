@@ -79,7 +79,7 @@ class RouteSolver(object):
         distances = []
         routes = []
         if(len(self.locations) < 3):
-            return ([], [], [0])
+            return ([], [], 0)
 
         for _ in range(iterCount):
             selectedIntersections = []
