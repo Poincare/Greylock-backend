@@ -7,7 +7,7 @@ from pants.ant import Ant
 
 import maps
 
-gmapsKey = 'AIzaSyD0xObEyHQF_wQbDeljl_Q7DqQYhg74Cls'
+gmapsKey = 'AIzaSyB3l0T_okkiRLRCpPVj_RIJFnsoP1VYgKM'
 gmapsClient = gmaps.Client(key = gmapsKey)
 
 def geoDistance(a,b):
@@ -41,7 +41,7 @@ def removeClose(locations):
     for location in locations:
         for other_loc in locations:
             if (other_loc != location):
-                if(geoDistance(location, other_loc) < 0.3):
+                if(geoDistance(location, other_loc) < 0.05):
                     locations.remove(location)
                     return locations
     return None
@@ -68,7 +68,7 @@ class RouteSolver(object):
         # return 5 * gmapsClient.distance_matrix(a[0],b[0])['rows'][0]['elements'][0]['distance']['value'] + \
         #     gmapsClient.distance_matrix(a[0],a[1])['rows'][0]['elements'][0]['distance']['value'] + \
         #     gmapsClient.distance_matrix(b[0],b[1])['rows'][0]['elements'][0]['distance']['value']
-        return 3 * geoDistance(a[0],b[0]) + geoDistance(a[0],a[1]) + geoDistance(b[0],b[1])
+        return 1 * geoDistance(a[0],b[0]) + 50 * (geoDistance(a[0],a[1]) + geoDistance(b[0],b[1]))
 
     def solveIteration(self, nearestIntersections):
         pandasSolver = PantsSolver(nearestIntersections,
