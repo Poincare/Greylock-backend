@@ -23,12 +23,15 @@ def computeRoutes():
     routeSolver = aco.RouteSolver(locationTuples, [destinationLatLng.latitude,
                                                    destinationLatLng.longitude])
 
-    (distances, routes) = routeSolver.solveRandomly(iterationCount)
+    (distances, routes, totalDists) = routeSolver.solveRandomly(iterationCount)
     indices = list(range(len(routes)))
     sortedIndices = sorted(indices, key = lambda x: distances[x])
     sortedRoutes = []
+    sortedDistances = []
     for index in sortedIndices:
         sortedRoutes.append(routes[index])
+        sortedDistances.append(distances[index])
+
     sortedRenderedRoutes = map(routeSolver.renderRoute, sortedRoutes)
     destinationTuple = [destinationLatLng.latitude,
                         destinationLatLng.longitude]
@@ -36,6 +39,8 @@ def computeRoutes():
     ret = {
         "paths": list(sortedRenderedRoutes),
         "points": locationTuples,
+        "best_distance": int(sortedDistances[0]),
+        "naive_distance": maps.getTotalNaive(addresses),
     }
     return json.dumps(ret)
 

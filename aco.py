@@ -79,7 +79,7 @@ class RouteSolver(object):
         distances = []
         routes = []
         if(len(self.locations) < 3):
-            return ([], [])
+            return ([], [], [0])
 
         for _ in range(iterCount):
             selectedIntersections = []
@@ -92,12 +92,19 @@ class RouteSolver(object):
             distances.append(solDist)
             routes.append(solRoute)
 
-        return (distances, routes, list(map(self.getTotalDistance, routes)))
+        return (distances,
+                routes,
+                [0])
 
     def getTotalDistance(self, route):
+        print('Route: ')
+        print(route)
         total = 0
         stops = self.renderRoute(route)
         for i in range(1,len(stops)):
+            print('STOPS: ')
+            print(stops[i])
+            print(stops[i-1])
             total += geoDistance(stops[i], stops[i-1])
         return total
 
