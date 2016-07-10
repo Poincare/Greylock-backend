@@ -6,15 +6,8 @@ import json
 gmapsKey = 'AIzaSyC19ecttqnSP6DxyANqAPH6_JSLee88T5A'
 gmapsClient = gmaps.Client(key = gmapsKey)
 
-origins = ["Perth, Australia", "Sydney, Australia",
-           "Melbourne, Australia", "Adelaide, Australia",
-           "Brisbane, Australia", "Darwin, Australia",
-           "Hobart, Australia", "Canberra, Australia"]
-destinations = ["Uluru, Australia",
-                "Kakadu, Australia",
-                "Blue Mountains, Australia",
-                "Bungle Bungles, Australia",
-                "The Pinnacles, Australia"]
+origins = [(40.760909, -73.991073)]
+destinations = [(40.757850, -73.994989)]
 matrix = gmapsClient.distance_matrix(origins, destinations)
 
 print(matrix)

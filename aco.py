@@ -22,13 +22,26 @@ class PantsSolver(object):
 
         return (solution.distance, solution.tour)
 
+def removeClose(locations):
+    for location in locations:
+        for other_loc in locations:
+            if (other_loc != location):
+                if(vincenty(location, other_loc).miles < 0.3):
+                    locations.remove(location)
+                    return locations
+    return None
+
 class RouteSolver(object):
     def __init__(self, locations):
+        while (removeClose(locations)):
+            pass
+
+
         self.locations = locations
         print("Locations: ", self.locations)
         self.busstops = list(map(self.getNearestIntersections, locations))
-        print('Bus stops: ')
-        print(self.busstops)
+        # print('Bus stops: ')
+        # print(self.busstops)
 
     def getNearestIntersections(self, location):
         nearestIntersections = []
@@ -38,6 +51,9 @@ class RouteSolver(object):
         return nearestIntersections
 
     def distanceBetweenPoints(self, a, b):
+        # return 5 * gmapsClient.distance_matrix(a[0],b[0])['rows'][0]['elements'][0]['distance']['value'] + \
+        #     gmapsClient.distance_matrix(a[0],a[1])['rows'][0]['elements'][0]['distance']['value'] + \
+        #     gmapsClient.distance_matrix(b[0],b[1])['rows'][0]['elements'][0]['distance']['value']
         return 5 * vincenty(a[0],b[0]).miles + vincenty(a[0],a[1]).miles + vincenty(b[0],b[1]).miles
 
     def solveIteration(self, nearestIntersections):
@@ -92,7 +108,7 @@ if __name__ == '__main__':
     solution = routesSolver.solveRandomly(10)
     print("SOLUTION:")
     print(solution)
-    stops = solution[1]
+    stops = solution[1][0]
 
     list_of_intersections = []
     for i in range(1,len(stops)):
