@@ -46,8 +46,8 @@ class RouteSolver(object):
         return pandasSolver.solve()
 
     def solveRandomly(self, iterCount):
-        bestDist = float('inf')
-        bestRoute = None
+        distances = []
+        routes = []
 
         for _ in range(iterCount):
             selectedIntersections = []
@@ -58,10 +58,10 @@ class RouteSolver(object):
 
             (solDist, solRoute) = self.solveIteration(selectedIntersections)
             if solDist < bestDist:
-                bestDist = solDist
-                bestRoute = solRoute
+                distances.append(solDist)
+                routes.append(solRoute)
 
-        return ([bestDist], [bestRoute])
+        return (distances, routes)
 
     def renderRoute(self, stops):
         listOfIntersections = []
