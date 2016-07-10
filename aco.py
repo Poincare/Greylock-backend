@@ -80,6 +80,10 @@ if __name__ == '__main__':
     homes.append((37.402992, -122.075254))
     homes.append((37.412791, -122.095741))
     homes.append((37.415972, -122.104818))
+    print("HOMES:")
+    for home in homes:
+        print ("[{0}, {1}],".format(home[1], home[0]))
+
 
     routesSolver = RouteSolver(homes)
     solution = routesSolver.solveRandomly(10)
