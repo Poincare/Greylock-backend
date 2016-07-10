@@ -16,9 +16,10 @@ def index():
 def computeRoutes():
     error = None
     addresses = json.loads(request.args.get('addresses'))
+    destination = request.args.get('destination')
     locationsList = list(map(maps.addressToLatLngTuple, addresses))
     locationTuples = list(map(lambda x: [x.latitude, x.longitude], locationsList))
-    routeSolver = aco.RouteSolver(locationTuples)
+    routeSolver = aco.RouteSolver(locationTuples, (maps.addressToLatLngTuple(destination).latitude, maps.addressToLatLngTuple(destination).longitude))
 
     (distances, routes) = routeSolver.solveRandomly(iterationCount)
     indices = list(range(len(routes)))

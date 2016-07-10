@@ -3,6 +3,7 @@ import math
 import random
 import googlemaps as gmaps
 from geopy.distance import vincenty
+from pants.ant import Ant
 
 import maps
 
@@ -16,19 +17,37 @@ class PantsSolver(object):
 
     def solve(self):
         world = pants.World(self.nodes, self.distMetric)
-        solver = pants.Solver()
-        solution = solver.solve(world)
-        solutions = solver.solutions(world)
+        ants = [Ant().initialize(world, world.nodes[0]) for i in range(10)]
 
-        return (solution.distance, solution.tour)
+        solver = pants.Solver()
+        # solution = solver.solve(world)
+        # solutions = solver.solutions(world)
+        solver.find_solutions(ants)
+        ants = sorted(ants)
+        for i in range(1, len(ants)):
+            assert ants[i - 1].distance <= ants[i].distance
+
+        return (ants[0].distance, ants[0].tour)
+
+def removeClose(locations):
+    for location in locations:
+        for other_loc in locations:
+            if (other_loc != location):
+                if(vincenty(location, other_loc).miles < 0.3):
+                    locations.remove(location)
+                    return locations
+    return None
 
 class RouteSolver(object):
-    def __init__(self, locations):
-        self.locations = locations
+    def __init__(self, locations, destination):
+        while (removeClose(locations)):
+            pass
+
+        self.locations = [destination] + locations
         print("Locations: ", self.locations)
         self.busstops = list(map(self.getNearestIntersections, locations))
-        print('Bus stops: ')
-        print(self.busstops)
+        # print('Bus stops: ')
+        # print(self.busstops)
 
     def getNearestIntersections(self, location):
         nearestIntersections = []
@@ -38,6 +57,9 @@ class RouteSolver(object):
         return nearestIntersections
 
     def distanceBetweenPoints(self, a, b):
+        # return 5 * gmapsClient.distance_matrix(a[0],b[0])['rows'][0]['elements'][0]['distance']['value'] + \
+        #     gmapsClient.distance_matrix(a[0],a[1])['rows'][0]['elements'][0]['distance']['value'] + \
+        #     gmapsClient.distance_matrix(b[0],b[1])['rows'][0]['elements'][0]['distance']['value']
         return 5 * vincenty(a[0],b[0]).miles + vincenty(a[0],a[1]).miles + vincenty(b[0],b[1]).miles
 
     def solveIteration(self, nearestIntersections):
@@ -48,6 +70,8 @@ class RouteSolver(object):
     def solveRandomly(self, iterCount):
         distances = []
         routes = []
+        if(len(self.locations) < 3):
+            return ([], [])
 
         for _ in range(iterCount):
             selectedIntersections = []
@@ -74,25 +98,25 @@ class RouteSolver(object):
 
 if __name__ == '__main__':
     homes = []
-    homes.append((37.391905, -122.090510))
-    homes.append((37.392429, -122.083883))
-    homes.append((37.400337, -122.081737))
-    homes.append((37.392624, -122.079573))
-    homes.append((37.396269, -122.076458))
-    homes.append((37.406044, -122.077245))
-    homes.append((37.402992, -122.075254))
-    homes.append((37.412791, -122.095741))
-    homes.append((37.415972, -122.104818))
+    homes.append((40.760909, -73.991073))
+    homes.append((40.757850, -73.994989))
+    homes.append((40.745536, -73.991057))
+    homes.append((40.745745, -73.994093))
+    homes.append((40.746582, -73.987929))
+    homes.append((40.758566, -73.984723))
+    homes.append((40.755478, -73.983392))
+    homes.append((40.756746, -73.983006))
+    homes.append((40.762304, -73.982706))
     print("HOMES:")
     for home in homes:
         print ("[{0}, {1}],".format(home[1], home[0]))
 
 
-    routesSolver = RouteSolver(homes)
+    routesSolver = RouteSolver(homes, (40.79011, -74.00000))
     solution = routesSolver.solveRandomly(10)
     print("SOLUTION:")
     print(solution)
-    stops = solution[1]
+    stops = solution[1][0]
 
     list_of_intersections = []
     for i in range(1,len(stops)):
@@ -100,4 +124,4 @@ if __name__ == '__main__':
 
     print("SEND TO FRONTEND:")
     for interesection in list_of_intersections:
-        print ("[{0}, {1}],".format(interesection[1], interesection[0]))
+        print ("[{0}, {1}],".format(interesection[0], interesection[1]))
