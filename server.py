@@ -18,10 +18,10 @@ def computeRoutes():
     addresses = json.loads(request.args.get('addresses'))
     destination = request.args.get('destination')
     locationsList = list(map(maps.addressToLatLngTuple, addresses))
-    locationTuples = list(map(lambda x: [x.latitude, x.longitude], locationsList))
+    locationTuples = list(map(lambda x: [x['lat'], x['lng']], locationsList))
     destinationLatLng = maps.addressToLatLngTuple(destination)
-    routeSolver = aco.RouteSolver(locationTuples, [destinationLatLng.latitude,
-                                                   destinationLatLng.longitude])
+    routeSolver = aco.RouteSolver(locationTuples, [destinationLatLng['lat'],
+                                                   destinationLatLng['lng']])
 
     (distances, routes, bestDistance) = routeSolver.solveRandomly(iterationCount)
     indices = list(range(len(routes)))
@@ -33,9 +33,9 @@ def computeRoutes():
         sortedDistances.append(distances[index])
 
     sortedRenderedRoutes = map(routeSolver.renderRoute, sortedRoutes)
-    destinationTuple = [destinationLatLng.latitude,
-                        destinationLatLng.longitude]
-    locationTuples.append([destinationLatLng.latitude, destinationLatLng.longitude]);
+    destinationTuple = [destinationLatLng['lat'],
+                        destinationLatLng['lng']]
+    locationTuples.append([destinationLatLng['lat'], destinationLatLng['lng']]);
     ret = {
         "paths": list(sortedRenderedRoutes),
         "points": locationTuples,
