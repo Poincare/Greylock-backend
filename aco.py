@@ -71,15 +71,15 @@ class RouteSolver(object):
 
 if __name__ == '__main__':
     homes = []
-    homes.append((37.391905, -122.090510))
-    homes.append((37.392429, -122.083883))
-    homes.append((37.400337, -122.081737))
-    homes.append((37.392624, -122.079573))
-    homes.append((37.396269, -122.076458))
-    homes.append((37.406044, -122.077245))
-    homes.append((37.402992, -122.075254))
-    homes.append((37.412791, -122.095741))
-    homes.append((37.415972, -122.104818))
+    homes.append((40.760909, -73.991073))
+    homes.append((40.757850, -73.994989))
+    homes.append((40.745536, -73.991057))
+    homes.append((40.745745, -73.994093))
+    homes.append((40.746582, -73.987929))
+    homes.append((40.758566, -73.984723))
+    homes.append((40.755478, -73.983392))
+    homes.append((40.756746, -73.983006))
+    homes.append((40.762304, -73.982706))
     print("HOMES:")
     for home in homes:
         print ("[{0}, {1}],".format(home[1], home[0]))
@@ -97,4 +97,4 @@ if __name__ == '__main__':
 
     print("SEND TO FRONTEND:")
     for interesection in list_of_intersections:
-        print ("[{0}, {1}],".format(interesection[1], interesection[0]))
+        print ("[{0}, {1}],".format(interesection[0], interesection[1]))
