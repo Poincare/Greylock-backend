@@ -2,6 +2,7 @@ from flask import Flask, request
 import json
 import aco
 import maps
+import random
 
 app = Flask('Transyt')
 
@@ -14,6 +15,9 @@ def index():
 
 @app.route('/compute_routes.json', methods=['GET'])
 def computeRoutes():
+
+    random.seed(7)
+
     error = None
     addresses = json.loads(request.args.get('addresses'))
     destination = request.args.get('destination')
@@ -39,9 +43,11 @@ def computeRoutes():
     ret = {
         "paths": list(sortedRenderedRoutes),
         "points": locationTuples,
-        "best_distance": int(bestDistance),
-        "naive_distance": int(maps.getTotalNaive(locationTuples)),
+        "best_distance": int(bestDistance) + 1,
+        "naive_distance": int(maps.getTotalNaive(locationTuples)) + 1,
     }
+    print("BEST FKING DISTANCE")
+    print(ret["best_distance"])
     return json.dumps(ret)
 
 if __name__ == '__main__':
