@@ -54,8 +54,8 @@ class RouteSolver(object):
         self.locations = [destination] + locations
         print("Locations: ", self.locations)
         self.busstops = [[(destination, destination)]] + list(map(self.getNearestIntersections, locations))
-        # print('Bus stops: ')
-        # print(self.busstops)
+        print('Bus stops: ')
+        print(self.busstops)
 
     def getNearestIntersections(self, location):
         nearestIntersections = []
@@ -68,7 +68,7 @@ class RouteSolver(object):
         # return 5 * gmapsClient.distance_matrix(a[0],b[0])['rows'][0]['elements'][0]['distance']['value'] + \
         #     gmapsClient.distance_matrix(a[0],a[1])['rows'][0]['elements'][0]['distance']['value'] + \
         #     gmapsClient.distance_matrix(b[0],b[1])['rows'][0]['elements'][0]['distance']['value']
-        return 1 * geoDistance(a[0],b[0]) + 50 * (geoDistance(a[0],a[1]) + geoDistance(b[0],b[1]))
+        return 500 * geoDistance(a[0],b[0]) + 0.5 * (geoDistance(a[0],a[1]) + geoDistance(b[0],b[1]))
 
     def solveIteration(self, nearestIntersections):
         pandasSolver = PantsSolver(nearestIntersections,
@@ -87,6 +87,7 @@ class RouteSolver(object):
             for nodes in self.busstops:
                 ## pick a random interesection
                 selectedIntersections.append(random.choice(nodes))
+            print('Selected intersections: ', selectedIntersections)
 
             (solDist, solRoute) = self.solveIteration(selectedIntersections)
             distances.append(solDist)
