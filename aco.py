@@ -94,18 +94,13 @@ class RouteSolver(object):
 
         return (distances,
                 routes,
-                [0])
+                min(list(map(self.getTotalDistance, routes))))
 
     def getTotalDistance(self, route):
-        print('Route: ')
-        print(route)
         total = 0
         stops = self.renderRoute(route)
         for i in range(1,len(stops)):
-            print('STOPS: ')
-            print(stops[i])
-            print(stops[i-1])
-            total += geoDistance(stops[i], stops[i-1])
+            total += geoDistance(stops[i][0], stops[i-1][0])
         return total
 
     def renderRoute(self, stops):
