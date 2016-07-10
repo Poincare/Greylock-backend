@@ -2,13 +2,22 @@ import pants
 import math
 import random
 import googlemaps as gmaps
-from geopy.distance import vincenty
+# from geopy.distance import vincenty
 from pants.ant import Ant
 
 import maps
 
 gmapsKey = 'AIzaSyC19ecttqnSP6DxyANqAPH6_JSLee88T5A'
 gmapsClient = gmaps.Client(key = gmapsKey)
+
+def geoDistance(a,b):
+    deltal = (b[1] - a[1]) * 0.0174533
+    phi1 = a[0] * 0.0174533
+    phi2 = b[0] * 0.0174533
+    x = deltal * math.cos((phi1 + phi2) / 2.0)
+    y = phi2 - phi1
+    return (math.sqrt(x*x + y*y) * 3959)
+
 
 class PantsSolver(object):
     def __init__(self, nodes, distMetric):
@@ -33,7 +42,7 @@ def removeClose(locations):
     for location in locations:
         for other_loc in locations:
             if (other_loc != location):
-                if(vincenty(location, other_loc).miles < 0.3):
+                if(geoDistance(location, other_loc) < 0.3):
                     locations.remove(location)
                     return locations
     return None
@@ -45,7 +54,7 @@ class RouteSolver(object):
 
         self.locations = [destination] + locations
         print("Locations: ", self.locations)
-        self.busstops = list(map(self.getNearestIntersections, locations))
+        self.busstops = [[(destination, destination)]] + list(map(self.getNearestIntersections, locations))
         # print('Bus stops: ')
         # print(self.busstops)
 
@@ -60,7 +69,7 @@ class RouteSolver(object):
         # return 5 * gmapsClient.distance_matrix(a[0],b[0])['rows'][0]['elements'][0]['distance']['value'] + \
         #     gmapsClient.distance_matrix(a[0],a[1])['rows'][0]['elements'][0]['distance']['value'] + \
         #     gmapsClient.distance_matrix(b[0],b[1])['rows'][0]['elements'][0]['distance']['value']
-        return 5 * vincenty(a[0],b[0]).miles + vincenty(a[0],a[1]).miles + vincenty(b[0],b[1]).miles
+        return 3 * geoDistance(a[0],b[0]) + geoDistance(a[0],a[1]) + geoDistance(b[0],b[1])
 
     def solveIteration(self, nearestIntersections):
         pandasSolver = PantsSolver(nearestIntersections,
