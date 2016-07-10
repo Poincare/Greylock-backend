@@ -25,7 +25,10 @@ class PantsSolver(object):
 class RouteSolver(object):
     def __init__(self, locations):
         self.locations = locations
+        print("Locations: ", self.locations)
         self.busstops = list(map(self.getNearestIntersections, locations))
+        print('Bus stops: ')
+        print(self.busstops)
 
     def getNearestIntersections(self, location):
         nearestIntersections = []
@@ -58,7 +61,7 @@ class RouteSolver(object):
                 bestDist = solDist
                 bestRoute = solRoute
 
-        return (bestDist, bestRoute)
+        return ([bestDist], [bestRoute])
 
     def renderRoute(self, stops):
         listOfIntersections = []
