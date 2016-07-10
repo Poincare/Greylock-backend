@@ -18,7 +18,6 @@ def geoDistance(a,b):
     y = phi2 - phi1
     return (math.sqrt(x*x + y*y) * 3959)
 
-
 class PantsSolver(object):
     def __init__(self, nodes, distMetric):
         self.nodes = nodes
@@ -93,7 +92,14 @@ class RouteSolver(object):
             distances.append(solDist)
             routes.append(solRoute)
 
-        return (distances, routes)
+        return (distances, routes, list(map(self.getTotalDistance, routes)))
+
+    def getTotalDistance(self, route):
+        total = 0
+        stops = self.renderRoute(route)
+        for i in range(1,len(stops)):
+            total += geoDistance(stops[i], stops[i-1])
+        return total
 
     def renderRoute(self, stops):
         listOfIntersections = []
