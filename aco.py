@@ -27,7 +27,7 @@ class PantsSolver(object):
     def solve(self):
         world = pants.World(self.nodes, self.distMetric)
         ants = [Ant().initialize(world, world.nodes[0]) for i in range(10)]
-        
+
         solver = pants.Solver()
         # solution = solver.solve(world)
         # solutions = solver.solutions(world)
@@ -77,11 +77,10 @@ class RouteSolver(object):
         return pandasSolver.solve()
 
     def solveRandomly(self, iterCount):
+        distances = []
+        routes = []
         if(len(self.locations) < 3):
             return ([], [])
-
-        bestDist = float('inf')
-        bestRoute = None
 
         for _ in range(iterCount):
             selectedIntersections = []
@@ -92,10 +91,10 @@ class RouteSolver(object):
 
             (solDist, solRoute) = self.solveIteration(selectedIntersections)
             if solDist < bestDist:
-                bestDist = solDist
-                bestRoute = solRoute
+                distances.append(solDist)
+                routes.append(solRoute)
 
-        return ([bestDist], [bestRoute])
+        return (distances, routes)
 
     def renderRoute(self, stops):
         listOfIntersections = []
