@@ -3,6 +3,7 @@ import math
 import random
 import googlemaps as gmaps
 from geopy.distance import vincenty
+from pants.ant import Ant
 
 import maps
 
@@ -16,11 +17,17 @@ class PantsSolver(object):
 
     def solve(self):
         world = pants.World(self.nodes, self.distMetric)
+        ants = [Ant().initialize(world, world.nodes[0]) for i in range(10)]
+        
         solver = pants.Solver()
-        solution = solver.solve(world)
-        solutions = solver.solutions(world)
+        # solution = solver.solve(world)
+        # solutions = solver.solutions(world)
+        solver.find_solutions(ants)
+        ants = sorted(ants)
+        for i in range(1, len(ants)):
+            assert ants[i - 1].distance <= ants[i].distance
 
-        return (solution.distance, solution.tour)
+        return (ants[0].distance, ants[0].tour)
 
 def removeClose(locations):
     for location in locations:
@@ -32,12 +39,11 @@ def removeClose(locations):
     return None
 
 class RouteSolver(object):
-    def __init__(self, locations):
+    def __init__(self, locations, destination):
         while (removeClose(locations)):
             pass
 
-
-        self.locations = locations
+        self.locations = [destination] + locations
         print("Locations: ", self.locations)
         self.busstops = list(map(self.getNearestIntersections, locations))
         # print('Bus stops: ')
@@ -62,6 +68,9 @@ class RouteSolver(object):
         return pandasSolver.solve()
 
     def solveRandomly(self, iterCount):
+        if(len(self.locations) < 3):
+            return ([], [])
+
         bestDist = float('inf')
         bestRoute = None
 
@@ -104,7 +113,7 @@ if __name__ == '__main__':
         print ("[{0}, {1}],".format(home[1], home[0]))
 
 
-    routesSolver = RouteSolver(homes)
+    routesSolver = RouteSolver(homes, (40.79011, -74.00000))
     solution = routesSolver.solveRandomly(10)
     print("SOLUTION:")
     print(solution)
