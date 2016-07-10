@@ -35,7 +35,7 @@ def computeRoutes():
     sortedRenderedRoutes = map(routeSolver.renderRoute, sortedRoutes)
     destinationTuple = [destinationLatLng['lat'],
                         destinationLatLng['lng']]
-    locationTuples.append([destinationLatLng['lat'], destinationLatLng['lng']]);
+    locationTuples = [[destinationLatLng['lat'], destinationLatLng['lng']]] + locationTuples
     ret = {
         "paths": list(sortedRenderedRoutes),
         "points": locationTuples,
