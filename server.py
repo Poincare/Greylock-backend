@@ -28,7 +28,7 @@ def computeRoutes():
         sortedRoutes.append(routes[index])
     sortedRenderedRoutes = map(routeSolver.renderRoute, sortedRoutes)
     ret = {
-        "path": list(sortedRenderedRoutes),
+        "paths": list(sortedRenderedRoutes),
         "points": locationTuples,
     }
     return json.dumps(ret)
