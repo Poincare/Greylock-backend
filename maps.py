@@ -2,6 +2,7 @@
 import googlemaps as gmaps
 from datetime import datetime
 import json
+import geopy
 
 gmapsKey = 'AIzaSyC19ecttqnSP6DxyANqAPH6_JSLee88T5A'
 gmapsClient = gmaps.Client(key = gmapsKey)
@@ -25,6 +26,10 @@ def getRouteIntersections(gmapsClient, origin, destination, maxWalk):
                 return validIntersections
 
     return validIntersections
+
+def addressToLatLngTuple(address):
+    location = geopy.Nominatim().geocode(address)
+    return location
 
 # Returns list of intersections in a route to give to FrontEnd
 def getFinalResult(gmapsClient, origin, destination):

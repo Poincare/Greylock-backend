@@ -1,6 +1,7 @@
 from flask import Flask, request
 import json
 import aco
+import maps
 
 app = Flask('Transyt')
 
@@ -14,10 +15,11 @@ def index():
 @app.route('/compute_routes.json', methods=['GET'])
 def computeRoutes():
     error = None
-    locationsJSONStr = request.args.get('locations', '')
-    locationsList = json.loads(locationsJSONStr)
-    locationTuples = map(locationsList, lambda x: (x[0], x[1]))
+    addresses = json.loads(request.args.get('addresses'))
+    locationsList = list(map(maps.addressToLatLngTuple, addresses))
+    locationTuples = list(map(lambda x: [x.latitude, x.longitude], locationsList))
     routeSolver = aco.RouteSolver(locationTuples)
+
     (distances, routes) = routeSolver.solveRandomly(iterationCount)
     indices = list(range(len(routes)))
     sortedIndices = sorted(indices, key = lambda x: distances[x])
@@ -25,7 +27,11 @@ def computeRoutes():
     for index in sortedIndices:
         sortedRoutes.append(routes[index])
     sortedRenderedRoutes = map(routeSolver.renderRoute, sortedRoutes)
-    return json.dumps(sortedRenderedRoutes)
+    ret = {
+        "path": list(sortedRenderedRoutes),
+        "points": locationTuples,
+    }
+    return json.dumps(ret)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=2000, debug=True)
